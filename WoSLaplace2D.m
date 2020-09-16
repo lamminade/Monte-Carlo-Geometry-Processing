@@ -11,12 +11,12 @@ scene = [
 ];
    
 %%%%%%%%%%%%%%%% main %%%%%%%%%%%%%%%%
-out = zeros(129, 129);
-s = 129;    % image size
-for j = 1:s
+N = 129;    % image size
+out = zeros(N,N);
+for j = 1:N
     fprintf("row %i of %i\n", j, s);
-    for i = 1:s
-        x0 = [ (i-1)./(s-1), (j-1)./(s-1) ];
+    for i = 1:N
+        x0 = [ (i-1)./(N-1), (j-1)./(N-1) ];
         u = solve(x0, scene);
         out(i,j) = cast(u, 'double');
     end
@@ -55,9 +55,25 @@ function res = solve(x0, segments)
     maxSteps = 16;  % maximum walk length
     
     sum = 0;
+    
+    % can we do all walks at once...   need to vectorize some of the helper
+    % functions.
+   
+%     xv = ones(128,1) * x0;
+%     steps = 0;
+%     while true
+%         R = ones(128,1) * realmax();
+%         for j = 1:size(segments,1)
+%             % get closest points simulateously!
+%             
+%         end
+%     end
+    
+    
     for i = 0:nWalks
         x = x0;
         steps = 0;
+       
         
         while true % this is my do-while in matlab
             R = realmax();
