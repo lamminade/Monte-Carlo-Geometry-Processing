@@ -1,8 +1,9 @@
-function res = laplacesolve(x0, segments, boundaryConditionFxn)
+function res = laplacesolve(x0, segments, boundaryfxn)
 % LAPLACESOLVE - Solves a Laplace equation Δu = 0 at x0
 % Solves a Laplace equation Δu = 0 at x0, where the boundary is given
 %   by a collection of segments, and the boundary conditions are 
-%   evaluated by the function 'checker' which can be evaluated at any point in space
+%   evaluated by the function 'boundaryfxn' which can be evaluated 
+%   at any point in space
 
     eps = 0.01;     % stopping tolerance
     nWalks = 128;   % number of Monte Carlo samples
@@ -29,8 +30,10 @@ function res = laplacesolve(x0, segments, boundaryConditionFxn)
         end
     end
     
-    sumMat = arrayfun(@(x,y) boundaryConditionFxn([x y]), xv(:,1:1), xv(:,2:2)); %% or other boundary condition thing
-    res = sum(sumMat) ./ nWalks; % monte carlo estimate
+    % apply boundary condition function to all rows of xv
+    %xvBC = arrayfun(@(x,y) boundaryfxn([x y]), xv(:,1:1), xv(:,2:2));
+    xvBC = boundaryfxn(segments, xv);
+    res = sum(xvBC) ./ nWalks; % monte carlo estimate
 end
 
 function r = randomvector(n, min, max)

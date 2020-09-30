@@ -20,12 +20,3 @@ function y = clampVector(v, lo, hi)
     y(y<lo) = lo;
 end
 
-% returns the point on segment s closest to x
-% function y1 = closestPoint(x, s) % s = [ x1 y1 x2 y2], s[0] = [s(1) s(2)] s[1] = [s(3) s(4)]
-%     u = [(s(3)-s(1)) (s(4)-s(2))];
-%     dotOne = dot(x - [s(1) s(2)], u);   
-%     dotTwo = dot(u,u);
-%     t = clamp(dotOne./dotTwo);
-%     y1 = (1-t)*([s(1) s(2)]) + t*([s(3) s(4)]);
-% end
-
