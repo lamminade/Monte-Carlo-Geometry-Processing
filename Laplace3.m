@@ -72,7 +72,8 @@ conductivity = ones(n,1);
 conductivity(n/2:end) = 1000;
 scale = spdiags(conductivity,0, n,n);
 
-S(1:n,1:n)  =  (speye(n,n) - 1* scale * S(1:n,1:n)); 
+time = 10; % length of time for heat diffusion
+S(1:n,1:n)  =  (speye(n,n) - time* scale * S(1:n,1:n)); 
 
 S(n+1:end,1:n) = C;
 S(1:n,n+1:end) = C';
