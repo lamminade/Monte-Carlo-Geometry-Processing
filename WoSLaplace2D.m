@@ -11,10 +11,10 @@
 
 % Badpuzzle with boundary conditions attached
 scene = [
-    [ [0.2, 0.2], [0.2, 0.7] 1]; % left wall (LW)
-    [ [0.8, 0.2], [0.8, 0.7] 1]; % right wall
-    [ [0.2, 0.2], [0.8, 0.2] 1]; % bottom wall
-    [ [0.4, 0.7], [0.8, 0.7] 1]; % top wall (has opening)
+    [ [0.3, 0.3], [0.3, 0.7] 1]; % top wall
+    [ [0.7, 0.45], [0.7, 0.7] 1]; % bottom wall (has opening)
+    [ [0.3, 0.3], [0.7, 0.3] 1]; % left wall
+    [ [0.3, 0.7], [0.7, 0.7] 1]; % right wall 
      % outside perimeter of image ! 
     [ [0, 0], [0, 1] -1];    % LS
     [ [1, 0], [1, 1] -1];       % RS 
@@ -23,19 +23,20 @@ scene = [
 ];
 
 %%%%%%%%%%%%%%%% main - vector version %%%%%%%%%%%%%%%%
-N = 129;           % image size
+N = 100;           % image size
 out = zeros(N,N);
 
 for j = 1:N
-    fprintf("row %i of %i\n", j, N);
+    %fprintf("row %i of %i\n", j, N);
     for i = 1:N
         x0 = [ (i-1)./(N-1), (j-1)./(N-1) ];
-        u = laplacesolve(x0, scene, @checkerTwo);
+        u = laplacesolve(x0, scene, @getboundaryvalue);
         out(i,j) = u;
     end
 end
 
 imagesc(out);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Boundary condition functions to pass into the solve
@@ -46,27 +47,7 @@ function c = checker(x)
     c = fmod(floor(s .* x(1)) + floor(s .* x(2)), 2 );
 end
 
-% pls vectorize this
-% function c = checkerTwoSlow(segments, xv)
-% % new boundary condition checker where boundary condition is instead
-% %   attached to the segments as the final value of the segment
-% % checks which segment/edge is closest to x and then returns value of the
-% %   bounding function specified on that edge
-%     distances = zeros(1, size(segments, 1)); 
-%     for i = 1:size(xv,1)
-%         for j = 1:size(segments,1)
-%             p = closestpoint(xv(i:i,:), segments(j:j,:));
-%             distances(j) = vecnorm((xv(i:i,:)-p(i:i,:)).').'; %pdist([x;p],'euclidean') ?;
-%         end
-%     end
-%     % what to do when 2 equally close segments ??
-%     % for now .. i will just take the first -- bring this up w paul?
-%     [~, i] = min(distances);
-%     c = segments(i, size(segments,2)) * distances(i);
-% end
-
-% vectorized it
-function c = checkerTwo(segments, xv)
+function c = getboundaryvalue(segments, xv)
     [h, w] = size(segments);
     
     distances = zeros(size(xv,1), h); 
@@ -83,9 +64,9 @@ function c = checkerTwo(segments, xv)
         s = segments(I(j),w);
         % just set it = to boundary condition?
         c(j,1) = s; 
-        % whatever this is
+        % trying out things
         % c(j,1) = fmod(floor(s .* xv(1)) + floor(s .* xv(2)), 2);
-        % maybe we scale it by the distance from that boundary???
+        % maybe we scale it by the distance from that boundary??? - no
         % c(j,1) = s * distances(j, I(j));
     end
 end

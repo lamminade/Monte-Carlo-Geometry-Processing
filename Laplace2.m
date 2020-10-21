@@ -70,7 +70,8 @@ S(1:n,n+1:end) = C';
 
 rhsxx = [ zeros(n,1); rhsx ];
 
-phix = conjgrad( S, rhsxx, 1e-8 );
+% phix = conjgrad( S, rhsxx, 1e-8 );
+phix = S\rhsxx;
 
 norm(S*phix-rhsxx)
 

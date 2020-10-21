@@ -34,3 +34,5 @@ octave-workspace
 # End of https://www.toptal.com/developers/gitignore/api/matlab
 
 **/.DS_Store
+
+**/images
