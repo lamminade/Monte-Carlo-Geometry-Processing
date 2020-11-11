@@ -41,6 +41,7 @@ function res = screenedpoissonsolve(x0, segments, f, g, c)
     
     % apply g to all rows of xv
     gxv = arrayfun(@(x,y) g([x y]), xv(:,1:1), xv(:,2:2));
+    %gxv = g(xv);
     sumv = sumv + gxv;
     res = sum(sumv) ./ nWalks; % Monte Carlo estimate
 end

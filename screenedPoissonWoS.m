@@ -1,9 +1,9 @@
 scene= [
-    [ [50, 50], [50, 50] ] ;
-    [ [0, 0], [1, 0] ] ;
-    [ [0, 0], [0, 1] ] ;
-    [ [0, 1], [1, 1] ] ;
-    [ [1, 0], [1, 1] ] ;
+    [ [50, 50], [50, 50] 1 ] ;
+    [ [0, 0], [1, 0] -1 ] ;
+    [ [0, 0], [0, 1]  -1 ] ;
+    [ [0, 1], [1, 1]  -1 ] ;
+    [ [1, 0], [1, 1]  -1 ] ;
 ];          % need some scene
 c = 1;      % need some c
 
@@ -33,12 +33,43 @@ end
 disp("fin");
 imagesc(out);
 
-% reference solution
+% reference solution (g)
 function c = uref(x)
-   c = cos(2 * pi * x(1)) * sin(2 * pi * x(2));
+	c = cos(2 * pi * x(1)) * sin(2 * pi * x(2)); 
+%     if (x(2) >= 40)
+%         c = 10;
+%     end
+%     if (x(2) < 40)
+%         c = 1;
+%     end
 end
 
-% Laplacian of reference solution
-function cv = laplace_urefv(xv)
-   cv = 8 .* (pi .* pi) .* cos(2.*pi.*xv(:,1:1)) .* sin(2 .* pi .* xv(:,2:2));
+% Laplacian of reference solution (f)
+function c = laplace_urefv(xv)
+    c = 8 .* (pi .* pi) .* cos(2.*pi.*xv(:,1:1)) .* sin(2 .* pi .* xv(:,2:2));
+%     [h, w] = size(segments);
+%     
+%     distances = zeros(size(xv,1), h); 
+%     for j = 1:h
+%     	pv = closestpoints(xv, segments(j:j,:));
+%         distances(:,j:j) = vecnorm((xv-pv).').';
+%     end
+%     
+%     [~, I] = min(distances,[],2);
+%     
+%     c = zeros(size(I,1),1);
+%     for j = 1:size(I,1)
+%         % how do we want to treat the value of the boundary 
+%         s = segments(I(j),w);
+%         % just set it = to boundary condition?
+%         c(j,1) = s; 
+%     end
+%     if (xv(2) >= 40)
+%         cv = 10;
+%     end
+%     if (xv(2) < 40)
+%         cv = 1;
+%     end
+    %xv(xv(:,2) > 40) = 10;
+    %xv(xv(:,2) < 40) = 1;
 end
