@@ -21,6 +21,7 @@ function res = laplacesolve(x0, segments, boundaryfxn)
             pv = closestpoints(xv, segments(j:j,:));
             R = min(R, vecnorm((xv-pv).').');
         end
+        
         theta = randomvector(nWalks, 0, 2.*pi);
         xv = xv + [R.*cos(theta), R.*sin(theta)];
         steps = steps + 1;

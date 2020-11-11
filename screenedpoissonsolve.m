@@ -25,8 +25,7 @@ function res = screenedpoissonsolve(x0, segments, f, g, c)
         rVect = R .* sqrt(randomvector(nWalks, 0, 1));
         alpha = randomvector(nWalks, 0, 1);
         yVect = xv + [rVect .* cos(alpha), rVect .* sin(alpha)];
-        % value of u(xk+1) is weighted by normalization constant factor C
-        % (B.2.1)
+        % value of u(xk+1) is weighted by normalization constant factor C (B.2.1)
         C = 1 / besselj(0, rVect * sqrt(c));
         sumv = sumv .* C' + (pi .* R .* R) .* f(yVect) .* yukawa(rVect, c, R);
             
