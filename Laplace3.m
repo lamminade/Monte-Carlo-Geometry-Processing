@@ -89,13 +89,14 @@ norm(S*phix-rhsxx)
 vx = reshape(phix(1:n),gridSize,gridSize)';
 
 subplot(1,2,1);
+ax.YDir = 'normal';
 imagesc(vx);
 %imagesc(log(1.00001-vx));
 axis equal;
 axis([1,gridSize,1,gridSize])
 
 subplot(1,2,2);
-contour(vx, exp(-1:-1:-10))
+contour(flipud(vx), exp(-1:-1:-10))
 axis equal;
 axis([1,gridSize,1,gridSize])
 
