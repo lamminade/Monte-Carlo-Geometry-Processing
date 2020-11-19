@@ -18,24 +18,25 @@ val = 1;    % set to 1
 %X = drawline(X, bw(1:1,:), bw(2:2,:), val);
 %X = drawline(X, tw(1:1,:), tw(2:2,:), val);
 
-X(60,50) = val;
+
 
 
 %imagesc(X);
 
 % % lets draw lines around the outside that are -ve
-% l = [[1, 1];[1,gridSize]];
-% r = [[gridSize,1];[gridSize,gridSize]];
-% b = [[1,1];[gridSize, 1]];
-% t = [[1,gridSize];[gridSize,gridSize]];
-% val = -1;   % set to -1
-% 
-% X = drawline(X, l(1:1,:), l(2:2,:), val);
-% X = drawline(X, r(1:1,:), r(2:2,:), val);
-% X = drawline(X, b(1:1,:), b(2:2,:), val);
-% X = drawline(X, t(1:1,:), t(2:2,:), val);
+l = [[1, 1];[1,gridSize]];
+r = [[gridSize,1];[gridSize,gridSize]];
+b = [[1,1];[gridSize, 1]];
+t = [[1,gridSize];[gridSize,gridSize]];
+
+X = drawline(X, l(1:1,:), l(2:2,:), val);
+X = drawline(X, r(1:1,:), r(2:2,:), val);
+X = drawline(X, b(1:1,:), b(2:2,:), val);
+X = drawline(X, t(1:1,:), t(2:2,:), val);
 % 
 % imagesc(X);
+
+%X(60,50) = val;
 
 rhsx = [];
 C = [];
@@ -66,10 +67,10 @@ internalPoints=gridSize;
 e   = ones(internalPoints,1);
 spe = spdiags([e -2*e e], -1:1,internalPoints,internalPoints);
 Iz  = speye(internalPoints);
-S(1:n,1:n) = kron(Iz,spe)+kron(spe,Iz);
+S(1:n,1:n) = kron(Iz,spe)+kron(spe,Iz); % should be delta x^2 scale in here
 
 conductivity = ones(n,1);
-conductivity(n/2:end) = 1000;
+conductivity(n/2:end) = 1; % this is 1, 1000 is a good value for different conductivities (heterogenous)
 scale = spdiags(conductivity,0, n,n);
 
 time = 10; % length of time for heat diffusion

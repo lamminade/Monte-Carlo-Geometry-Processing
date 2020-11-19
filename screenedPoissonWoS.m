@@ -12,10 +12,10 @@ scene = [
 %     [ [0.3, 0.3], [0.7, 0.3] 1]; % left wall
 %     [ [0.3, 0.7], [0.7, 0.7] 1]; % right wall 
      % outside perimeter of image ! 
-    [ [0, 0], [0, 1] -1];    % LS
-    [ [1, 0], [1, 1] -1];       % RS 
-    [ [0, 0], [1, 0] -1]; % BS
-    [ [0, 1], [1, 1] -1];       % TS
+%     [ [0, 0], [0, 1] -1];    % LS
+%     [ [1, 0], [1, 1] -1];       % RS 
+%     [ [0, 0], [1, 0] -1]; % BS
+%     [ [0, 1], [1, 1] -1];       % TS
 ];
 
 % To validate the implementation we solve the Poisson equation
@@ -29,7 +29,7 @@ scene = [
 N = 100; % 28;
 out = zeros(N,N);
 
-c = 1/999999; 
+c = 1; 
 
 for j = 1:N
 	for i = 1:N
@@ -38,13 +38,36 @@ for j = 1:N
         % by a collection of segments, and the boundary conditions are given
         % by a function g that can be evaluated at any point in space
         % screenedpoissonsolve(x0, segments, f, g, c)
-        u = screenedpoissonsolve(x0, scene, @laplace_urefv, @uref, c);
+        u = screenedpoissonsolve(x0, scene, @laplace_urefv, @newG, c);
         out(i,j) = u;
 	end
 end
 
 disp("fin");
 imagesc(out);
+
+% New g function for input
+% this one instead calculates the distance to a 'point' (any line
+% segment), and returns 1 if we are close enough to it (epsilon), otherwise returns 0
+function c = newG(xv, segments)
+	%c = cos(2 * pi * x(1)) * sin(2 * pi * x(2)); 
+    eps = 0.2;
+    [h, w] = size(segments);
+    
+    distances = zeros(size(xv,1), h); 
+    for j = 1:h
+    	pv = closestpoints(xv, segments(j:j,:));
+        distances(:,j:j) = vecnorm((xv-pv).').';
+    end
+    
+    
+    [M, ~] = min(distances,[],2);
+    c = zeros(size(M,1),1);
+    c(M(:) < eps) = 1;
+    % lets just use 1 for now
+    %s = segments(I(j),w);
+    %c(j,1) = s; 
+end
 
 
 % reference solution (g)
@@ -77,7 +100,7 @@ end
 % Laplacian of reference solution (f)
 function c = laplace_urefv(xv)
     %c = 1; %8 .* (pi .* pi) .* cos(2.*pi.*xv(:,1:1)) .* sin(2 .* pi .* xv(:,2:2));
-    c(xv(:,2) > 40) = 100;
-    c(xv(:,2) <= 40) = 1;
+    c(xv(:,2) > 40) = 0;
+    c(xv(:,2) <= 40) = 0;
     c = c';
 end
